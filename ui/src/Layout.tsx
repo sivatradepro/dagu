@@ -136,8 +136,7 @@ function Content({ title, navbarColor, children }: DashboardContentProps) {
                     {context.title}
                   </NavBarTitleText>
                 )}
-              </AppBarContext.Consumer>
-              <NavBarTitleText>{title || 'Dagu'}</NavBarTitleText>
+              </AppBarContext.Consumer>              
             </Toolbar>
           </AppBar>
           <Grid

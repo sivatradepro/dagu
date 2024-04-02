@@ -3,11 +3,12 @@
 ########## Variables ##########
 SRC_DIR=./
 DST_DIR=$(SRC_DIR)/internal
-BUILD_VERSION=$(shell date +'%y%m%d%H%M%S')
+BUILD_VERSION=$(bash date +'%y%m%d%H%M%S')
 LDFLAGS=-X 'main.version=$(BUILD_VERSION)'
 
-VERSION=
-DOCKER_CMD := docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7 --build-arg VERSION=$(VERSION) --push --no-cache
+VERSION=1.0.0
+DOCKER_CMD := docker build --build-arg VERSION=$(VERSION) --push --no-cache
+DOCKER_CLI_EXPERIMENTAL=enabled
 
 DEV_CERT_SUBJ_CA="/C=TR/ST=ASIA/L=TOKYO/O=DEV/OU=DAGU/CN=*.dagu.dev/emailAddress=ca@dev.com"
 DEV_CERT_SUBJ_SERVER="/C=TR/ST=ASIA/L=TOKYO/O=DEV/OU=SERVER/CN=*.server.dev/emailAddress=server@dev.com"
@@ -36,7 +37,7 @@ swagger: clean-swagger gen-swagger
 
 certs: cert-dir gencerts-ca gencerts-server gencerts-client gencert-check
 
-build: build-ui build-dir gen-pb go-lint build-bin
+build: build-ui build-dir gen-pb build-bin
 
 build-image:
 ifeq ($(VERSION),)
@@ -62,6 +63,7 @@ gen-pb:
 	protoc -I=$(SRC_DIR) --go_out=$(DST_DIR) $(SRC_DIR)/internal/proto/*.proto
 
 build-bin:
+	go mod tidy
 	go build -ldflags="$(LDFLAGS)" -o ./bin/dagu .
 
 build-dir:
@@ -126,14 +128,14 @@ gen-swagger:
 	@go mod tidy
 
 install-protobuf:
-	brew install protobuf
+	sudo apt install protobuf-compiler
 	go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
 	go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
 	go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
+	go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.46.2
 
 install-nodemon:
 	npm install -g nodemon
 
 install-swagger:
-	brew tap go-swagger/go-swagger
-	brew install go-swagger
+	go install github.com/go-swagger/go-swagger/cmd/swagger@latest

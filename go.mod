@@ -1,6 +1,6 @@
 module github.com/dagu-dev/dagu
 
-go 1.19
+go 1.21
 
 require (
 	github.com/docker/docker v20.10.21+incompatible
@@ -14,6 +14,7 @@ require (
 	github.com/go-openapi/swag v0.22.3
 	github.com/go-openapi/validate v0.22.1
 	github.com/go-resty/resty/v2 v2.7.0
+	github.com/golang/protobuf v1.5.2
 	github.com/google/uuid v1.3.0
 	github.com/imdario/mergo v0.3.13
 	github.com/itchyny/gojq v0.12.12

@@ -1,0 +1,11 @@
+[Unit]
+Description=DAGU Scheduler
+After=network.target
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/dagu server
+User=administrator
+Group=administrator
+Restart=on-failure
+[Install]
+WantedBy=multi-user.target

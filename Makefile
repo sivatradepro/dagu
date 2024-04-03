@@ -7,8 +7,8 @@ BUILD_VERSION=$(bash date +'%y%m%d%H%M%S')
 LDFLAGS=-X 'main.version=$(BUILD_VERSION)'
 
 VERSION=1.0.0
-DOCKER_CMD := docker build --build-arg VERSION=$(VERSION) --push --no-cache
-DOCKER_CLI_EXPERIMENTAL=enabled
+DOCKER_CMD := docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7 --build-arg VERSION=$(VERSION) --push --no-cache
+export DOCKER_CLI_EXPERIMENTAL=enabled
 
 DEV_CERT_SUBJ_CA="/C=TR/ST=ASIA/L=TOKYO/O=DEV/OU=DAGU/CN=*.dagu.dev/emailAddress=ca@dev.com"
 DEV_CERT_SUBJ_SERVER="/C=TR/ST=ASIA/L=TOKYO/O=DEV/OU=SERVER/CN=*.server.dev/emailAddress=server@dev.com"
